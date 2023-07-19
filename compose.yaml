@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15.3-alpine3.18
+    environment:
+      POSTGRES_DB: coffeeshop
+      POSTGRES_USER: foo
+      POSTGRES_PASSWORD: foobar
+    ports:
+      - 5432
+    networks:
+      - coffeeshop-net
+
+  adminer:
+    image: adminer:latest
+    environment:
+      ADMINER_DESIGN: dracula
+    ports:
+      - 8081:8080
+    networks:
+      - coffeeshop-net
+    
+networks:
+  coffeeshop-net:
