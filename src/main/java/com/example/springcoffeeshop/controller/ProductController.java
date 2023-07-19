@@ -51,7 +51,7 @@ public class ProductController {
         Product newProduct = new Product(data);
         Product savedProduct = repository.save(newProduct);
 
-        return ResponseEntity.created(URI.create("/products/" + savedProduct.getId())).body(savedProduct);
+        return ResponseEntity.created(URI.create("/product/" + savedProduct.getId())).body(savedProduct);
     }
 
     @PutMapping("/{id}")
