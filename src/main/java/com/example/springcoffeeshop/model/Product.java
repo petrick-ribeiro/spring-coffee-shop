@@ -3,8 +3,6 @@ package com.example.springcoffeeshop.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.cglib.core.Local;
-
 import com.example.springcoffeeshop.dto.ProductRequestDTO;
 
 import jakarta.persistence.Entity;
