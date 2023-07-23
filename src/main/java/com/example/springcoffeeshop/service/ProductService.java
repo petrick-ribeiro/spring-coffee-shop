@@ -35,30 +35,28 @@ public class ProductService {
 
     public Product updateProductByID(UUID id, ProductRequestDTO product) {
         Product productToUpdate = findProductByID(id);
-        if (productToUpdate != null) {
-            productToUpdate.setName(product.name());
-            productToUpdate.setDescription(product.description());
-            productToUpdate.setPriceInCents(product.priceInCents());
-            productToUpdate.setIsAvailable(product.isAvailable());
-            productToUpdate.setUpdatedAt(LocalDateTime.now());
-
-            return repository.save(productToUpdate);
+        if (productToUpdate == null) {
+            return null;
         }
 
-        return productToUpdate;
+        productToUpdate.setName(product.name());
+        productToUpdate.setDescription(product.description());
+        productToUpdate.setPriceInCents(product.priceInCents());
+        productToUpdate.setIsAvailable(product.isAvailable());
+        productToUpdate.setUpdatedAt(LocalDateTime.now());
+
+        return repository.save(productToUpdate);
     }
 
     public Product removeProductByID(UUID id) {
         Product productToRemove = findProductByID(id);
-        if (productToRemove != null) {
-            productToRemove.setDeletedAt(LocalDateTime.now());
-            productToRemove.setIsDeleted(true);
-
-            repository.save(productToRemove);
-
-            return productToRemove;
+        if (productToRemove == null) {
+            return null;
         }
 
-        return productToRemove;
+        productToRemove.setDeletedAt(LocalDateTime.now());
+        productToRemove.setIsDeleted(true);
+
+        return repository.save(productToRemove);
     }
 }
