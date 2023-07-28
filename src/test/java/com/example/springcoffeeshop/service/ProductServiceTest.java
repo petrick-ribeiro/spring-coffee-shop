@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,16 +28,16 @@ import com.example.springcoffeeshop.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
-    @InjectMocks
-    ProductService service;
-
     @Mock
     ProductRepository repository;
+
+    @InjectMocks
+    ProductService service;
 
     Product product;
 
     @BeforeEach
-    public void setUp() {
+    public void setup() {
         product = new Product(
                 UUID.randomUUID(),
                 "Product 1",
@@ -69,11 +68,12 @@ public class ProductServiceTest {
     @Test
     public void shouldListAllProductsWithSucess() {
         when(repository.findByIsDeletedFalse(Sort.by(Sort.Direction.ASC, "name")))
-            .thenReturn(Collections.singletonList(product));
+            .thenReturn(List.of(product));
 
         List<Product> result = service.listAllProducts();
 
-        assertEquals(Collections.singletonList(product), result);
+        assertNotNull(result);
+        assertEquals(List.of(product), result);
         verify(repository).findByIsDeletedFalse(Sort.by(Sort.Direction.ASC, "name"));
         verifyNoMoreInteractions(repository);
     }
@@ -144,6 +144,7 @@ public class ProductServiceTest {
 
         Product result = service.updateProductByID(product.getId(), request);
 
+        assertNotNull(result);
         assertProductAttributesEqual(product, result);
         verify(repository).save(product);
         verifyNoMoreInteractions(repository);
@@ -162,7 +163,6 @@ public class ProductServiceTest {
         Product result = service.updateProductByID(nonExistentProductId, request);
 
         assertNull(result);
-
         verify(repository).findById(nonExistentProductId);
         verifyNoMoreInteractions(repository);
     }
@@ -179,7 +179,6 @@ public class ProductServiceTest {
         assertNotNull(result);
         assertEquals(product.getDeletedAt(), result.getDeletedAt());
         assertTrue(result.getIsDeleted());
-
         verify(repository).findById(product.getId());
         verify(repository).save(product);
         verifyNoMoreInteractions(repository);
@@ -193,7 +192,6 @@ public class ProductServiceTest {
         Product result = service.removeProductByID(nonExistentProductId);
 
         assertNull(result);
-
         verify(repository).findById(nonExistentProductId);
         verifyNoMoreInteractions(repository);
     }
